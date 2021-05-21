@@ -1,15 +1,17 @@
 import React from 'react';
-import {List, ListItem, Checkbox, DeliteIcon, ListItemText} from '@material-ui/core/'
+import {List, ListItem, ListItemText} from '@material-ui/core/'
 import { ToDoItems } from './ToDoItems';
 
 
-export function ToDosList({toDos}) {
+export function ToDosList({toDos, handleDelete, handleComplete}) {
     console.log(toDos)
     return(
         <List >
-            {toDos.map((inputValue) => (
+            {toDos.map((todo) => (
                 <ToDoItems 
-                    inputValue={inputValue}
+                    handleComplete={handleComplete}
+                    handleDelete={handleDelete}
+                    todo={todo}
                 />
             ))}
         </List>

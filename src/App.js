@@ -3,6 +3,7 @@ import './App.css';
 import { ToDosList } from './components/ToDosList';
 import ToDoInput from './components/ToDoInput';
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 function App(props) {
 
@@ -10,10 +11,43 @@ function App(props) {
   
   const handleSubmit = (inputValue) => {
     if(inputValue !== '') {
-      setToDos(prev => [{title: inputValue}, ...prev]);
+      setToDos(prev => [{
+        title: inputValue, 
+        date: new Date().toLocaleString(), 
+        complete: false,
+        id: uuidv4()}, 
+        ...prev]);
     }
-    
   };
+
+  const handleSortLater = (event) => {
+    
+  }
+
+  const handleSortEarlier = (event) => {
+
+  }
+
+  const handleDelete = (id, setToDos) => {
+    console.log(id)
+    setToDos = toDos.filter (item => item.id !== id)
+  }
+
+  const handleAll = (event) => {
+
+  }
+
+  const handleDone = (event) => {
+
+  }
+
+  const handleUndone = (event) => {
+
+  }
+
+  const handleComplete = (inputValue) => {
+    ((inputValue.complete === false) ? inputValue.complete = true : inputValue.complete = false);
+  }
 
   console.log(toDos);
   // const saveInput = e => {
@@ -27,19 +61,21 @@ function App(props) {
         <Grid container spacing={4} justify="space-around" >
           <Grid item>
             <ButtonGroup>
-              <Button>All</Button>
-              <Button>Done</Button>
-              <Button>Undone</Button>
+              <Button onClick={handleAll}>All</Button>
+              <Button onClick={handleDone}>Done</Button>
+              <Button onClick={handleUndone}>Undone</Button>
             </ButtonGroup>
           </Grid>
           <Grid item>
             <ButtonGroup>
-              <Button>Later</Button>
-              <Button>Earlier</Button>
+              <Button onClick={handleSortLater}>Later</Button>
+              <Button onClick={handleSortEarlier}>Earlier</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
       <ToDosList align='center' 
+      handleDelete={handleDelete}
+      handleComplete={handleComplete}
       toDos={toDos}/>
     </Container>
   );
