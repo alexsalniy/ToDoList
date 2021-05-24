@@ -28,10 +28,19 @@ function App(props) {
 
   }
 
-  const handleDelete = (id, setToDos) => {
-    console.log(id)
-    setToDos = toDos.filter (item => item.id !== id)
-  }
+  const handleDelete = (itemId) => {
+    setToDos(prev => prev.filter(item => item.id !== itemId));
+  };
+
+  // const handleDelete = (removeId) => {
+  //   setToDos(toDos => {
+  //     const filteredToDos = toDos.filter(toDos => toDos.id !== removeId);
+  //     return {toDos: filter}
+  //   })
+  //   console.log('Delited id = ', id)
+  //   toDos.filter (item => item.id !== id)
+  //   setToDos(prev => prev.filter (item => item.id !== id))
+  // }
 
   const handleAll = (event) => {
 
