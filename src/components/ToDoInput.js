@@ -7,7 +7,6 @@ function ToDoInput({handleSubmit}) {
     //    console.log(target.value);
          setInputValue(target.value)
        };
-    console.log(inputValue);
     return (
         <form onSubmit = {event => {
             event.preventDefault()
