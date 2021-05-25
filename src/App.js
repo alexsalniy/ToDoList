@@ -14,33 +14,28 @@ function App(props) {
       setToDos(prev => [{
         title: inputValue, 
         date: new Date().toLocaleString(), 
+        sortDate: new Date().getTime(),
         complete: false,
         id: uuidv4()}, 
         ...prev]);
     }
   };
 
-  const handleSortLater = (event) => {
-    
+  const handleSortLater = (a, b) => {
+    setToDos(prev => prev.sort((a, b) => b.sortDate - a.sortDate));
+    console.log('Later');
+    console.log(toDos);
   }
 
-  const handleSortEarlier = (event) => {
-
+  const handleSortEarlier = (a, b) => {
+    setToDos(prev => prev.sort((a, b) => a.sortDate - b.sortDate));
+    console.log('Earlier');
+    console.log(toDos);
   }
 
   const handleDelete = (itemId) => {
     setToDos(prev => prev.filter(item => item.id !== itemId));
   };
-
-  // const handleDelete = (removeId) => {
-  //   setToDos(toDos => {
-  //     const filteredToDos = toDos.filter(toDos => toDos.id !== removeId);
-  //     return {toDos: filter}
-  //   })
-  //   console.log('Delited id = ', id)
-  //   toDos.filter (item => item.id !== id)
-  //   setToDos(prev => prev.filter (item => item.id !== id))
-  // }
 
   const handleAll = (event) => {
 
