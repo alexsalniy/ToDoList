@@ -5,12 +5,11 @@ import React from 'react';
 export function ToDoItems({todo, handleDelete, handleComplete}) {
 
     return(
-        <ListItem id={todo.id} >
-            <Checkbox checked={StaticRange.checkedA} 
+        <ListItem key={todo.id} >
+            <Checkbox checked={todo.complete} 
             value={todo.id}
             color='primary'
-            checked={todo.complete}
-            onClick={handleComplete} />
+            onClick={() => handleComplete(todo.id)} />
             <ListItemText 
             primary={todo.title}
             />

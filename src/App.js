@@ -59,11 +59,15 @@ function App(props) {
     }
   }
 
-  const handleComplete = (event) => {
-    ((event.target.complete === false) ? 
-    event.target.complete = true : 
-    event.target.complete = false);
-    console.log('ABOBUS');
+  const handleComplete = (id) => {
+    // ((event.target.complete === false) ? 
+    // event.target.complete = true : 
+    // event.target.complete = false);
+    const newTodos = [...toDos];
+    const index = newTodos.findIndex(toDos => toDos.id === id);
+    console.log(newTodos[index].id);
+    newTodos[index].complete = ((newTodos[index].complete === false) ? true : false);
+    setToDos(newTodos);
   };
 
 
