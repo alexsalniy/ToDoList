@@ -4,7 +4,6 @@ import { ToDoItems } from './ToDoItems';
 
 
 export function ToDosList({toDos, handleDelete, handleComplete}) {
-    console.log(toDos)
     return(
         <List >
             {toDos.map((todo) => (

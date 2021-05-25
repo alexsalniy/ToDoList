@@ -6,7 +6,10 @@ export function ToDoItems({todo, handleDelete, handleComplete}) {
 
     return(
         <ListItem id={todo.id} >
-            <Checkbox checked={StaticRange.checkedA} color='primary'
+            <Checkbox checked={StaticRange.checkedA} 
+            value={todo.id}
+            color='primary'
+            checked={todo.complete}
             onClick={handleComplete} />
             <ListItemText 
             primary={todo.title}

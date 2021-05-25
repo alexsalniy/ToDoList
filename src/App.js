@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 function App(props) {
 
   const [toDos, setToDos] = useState([]);
+  const [dateSorter, setDateSorter] = useState(1);
+  const [checkSorter, setCheckSorter] = useState(1);
   
   const handleSubmit = (inputValue) => {
     if(inputValue !== '') {
@@ -21,16 +23,18 @@ function App(props) {
     }
   };
 
-  const handleSortLater = (a, b) => {
-    setToDos(prev => prev.sort((a, b) => b.sortDate - a.sortDate));
-    console.log('Later');
-    console.log(toDos);
+  const handleSortLater = (a, b, event) => {
+    if(dateSorter !== 1) {
+      setToDos(toDos => toDos.sort((a, b) => a.sortDate - b.sortDate));
+      setDateSorter(1);
+    }
   }
 
   const handleSortEarlier = (a, b) => {
-    setToDos(prev => prev.sort((a, b) => a.sortDate - b.sortDate));
-    console.log('Earlier');
-    console.log(toDos);
+    if(dateSorter !== 2) {
+      setToDos(toDos => toDos.sort((a, b) => b.sortDate - a.sortDate));
+      setDateSorter(2);
+    }
   }
 
   const handleDelete = (itemId) => {
@@ -38,25 +42,32 @@ function App(props) {
   };
 
   const handleAll = (event) => {
-
+    if(checkSorter !== 1) {
+      setCheckSorter(1);
+    }
   }
 
   const handleDone = (event) => {
-
+    if(checkSorter !== 2) {
+      setCheckSorter(2);
+    }
   }
 
   const handleUndone = (event) => {
-
+    if(checkSorter !== 3) {
+      setCheckSorter(3);
+    }
   }
 
-  const handleComplete = (inputValue) => {
-    ((inputValue.complete === false) ? inputValue.complete = true : inputValue.complete = false);
-  }
+  const handleComplete = (event) => {
+    ((event.target.complete === false) ? 
+    event.target.complete = true : 
+    event.target.complete = false);
+    console.log('ABOBUS');
+  };
+
 
   console.log(toDos);
-  // const saveInput = e => {
-  //     setInputValue(saveInput);
-  //   };
 
   return (
     <Container maxWidth="sm" >
@@ -65,15 +76,30 @@ function App(props) {
         <Grid container spacing={4} justify="space-around" >
           <Grid item>
             <ButtonGroup>
-              <Button onClick={handleAll}>All</Button>
-              <Button onClick={handleDone}>Done</Button>
-              <Button onClick={handleUndone}>Undone</Button>
+              <Button onClick={handleAll}
+              color={(checkSorter === 1) ? 'primary' : 'default'}
+              variant={(checkSorter === 1) ? 'contained' : 'outlined'}
+              >All</Button>
+              <Button onClick={handleDone}
+              color={(checkSorter === 2) ? 'primary' : 'default'}
+              variant={(checkSorter === 2) ? 'contained' : 'outlined'}
+              >Done</Button>
+              <Button onClick={handleUndone}
+              color={(checkSorter === 3) ? 'primary' : 'default'}
+              variant={(checkSorter === 3) ? 'contained' : 'outlined'}
+              >Undone</Button>
             </ButtonGroup>
           </Grid>
           <Grid item>
             <ButtonGroup>
-              <Button onClick={handleSortLater}>Later</Button>
-              <Button onClick={handleSortEarlier}>Earlier</Button>
+              <Button onClick={handleSortLater}
+              color={(dateSorter === 1) ? 'primary' : 'default'}
+              variant={(dateSorter === 1) ? 'contained' : 'outlined'}
+              >Later</Button>
+              <Button onClick={handleSortEarlier}
+              color={(dateSorter === 2) ? 'primary' : 'default'}
+              variant={(dateSorter === 2) ? 'contained' : 'outlined'}
+              >Earlier</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
