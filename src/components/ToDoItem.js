@@ -2,10 +2,10 @@ import { ListItem, ListItemText, Checkbox, IconButton } from '@material-ui/core'
 import { Delete } from '@material-ui/icons';
 import React from 'react';
 
-export function ToDoItems({todo, handleDelete, handleComplete}) {
+export function ToDoItem({todo, handleDelete, handleComplete}) {
 
     return(
-        <ListItem key={todo.id} >
+        <ListItem >
             <Checkbox checked={todo.complete} 
             value={todo.id}
             color='primary'

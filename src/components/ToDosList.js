@@ -1,13 +1,14 @@
 import React from 'react';
 import {List} from '@material-ui/core/'
-import { ToDoItems } from './ToDoItems';
+import { ToDoItem } from './ToDoItem';
 
 
 export function ToDosList({toDos, handleDelete, handleComplete}) {
     return(
         <List >
             {toDos.map((todo) => (
-                <ToDoItems 
+                <ToDoItem 
+                    key={todo.id}
                     handleComplete={handleComplete}
                     handleDelete={handleDelete}
                     todo={todo}
