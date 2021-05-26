@@ -1,7 +1,7 @@
 import { Grid, Button, ButtonGroup} from '@material-ui/core/';
 import { useState } from 'react';
 
-export function Filter({ handleChange, dateSortButton, doneButton, setDoneButton, setDateSortButton }) {
+export function Filter({ dateSortButton, doneButton, setDoneButton, setDateSortButton }) {
 
     const [dateSorter, setDateSorter] = useState(1);
     const [checkSorter, setCheckSorter] = useState(1);
@@ -11,7 +11,6 @@ export function Filter({ handleChange, dateSortButton, doneButton, setDoneButton
         if(dateSorter !== 1) {
           setDateSorter(1);
           setDateSortButton(1);
-          handleChange()
         }
     }
     
@@ -19,7 +18,6 @@ export function Filter({ handleChange, dateSortButton, doneButton, setDoneButton
         if(dateSorter !== 2) {
           setDateSorter(2);
           setDateSortButton(2);
-          handleChange()
         }
     }
 
@@ -27,7 +25,6 @@ export function Filter({ handleChange, dateSortButton, doneButton, setDoneButton
       if(checkSorter !== 1) {
         setCheckSorter(1);
         setDoneButton(1);
-        handleChange()
       }
     }
   
@@ -35,7 +32,6 @@ export function Filter({ handleChange, dateSortButton, doneButton, setDoneButton
       if(checkSorter !== 2) {
         setCheckSorter(2);
         setDoneButton(2);
-        handleChange()
       }
     }
   
@@ -43,14 +39,12 @@ export function Filter({ handleChange, dateSortButton, doneButton, setDoneButton
       if(checkSorter !== 3) {
         setCheckSorter(3);
         setDoneButton(3);
-        handleChange()
       }
     }
     
     return (
         <Grid container spacing={4} justify="space-around" >
-          <Grid item
-            onChange={handleChange}>
+          <Grid item >
             <ButtonGroup>
               <Button onClick={handleAll}
               color={(doneButton === 1) ? 'primary' : 'default'}

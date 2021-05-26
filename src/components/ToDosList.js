@@ -3,13 +3,13 @@ import {List} from '@material-ui/core/'
 import { ToDoItem } from './ToDoItem';
 
 
-export function ToDosList({toDos, handleDelete, handleComplete}) {
+export function ToDosList({filteredToDos, handleDelete, handleDone}) {
     return(
         <List >
-            {toDos.map((todo) => (
+            {filteredToDos.map((todo) => (
                 <ToDoItem 
                     key={todo.id}
-                    handleComplete={handleComplete}
+                    handleDone={handleDone}
                     handleDelete={handleDelete}
                     todo={todo}
                 />
