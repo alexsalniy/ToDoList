@@ -11,15 +11,16 @@ function App(props) {
 
   const [toDos, setToDos] = useState([]);
   const [filteredToDos, setFilteredToDos] = useState([]);
-  const [doneButton, setDoneButton] = useState(1);
-  const [dateSortButton, setDateSortButton] = useState(1);
+  const [sortByDone, setSortByDone] = useState('all'); 
+  const [sortByDate, setSortByDate] = useState('later');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [todosPerPage] = useState(5);
   
   const handleSubmit = (inputValue) => {
     if(inputValue !== '') {
       setToDos(prev => [{
         title: inputValue, 
-        date: new Date().toLocaleString(), 
-        sortDate: new Date().getTime(),
+        date: new Date(), 
         done: false,
         id: uuidv4()}, 
         ...prev]);
@@ -27,35 +28,24 @@ function App(props) {
   };
 
   useEffect(() => {
-    handleSortByDone(); 
-    // handleSortByDate();
-    console.log('did updated')
-    console.log('TODOS',JSON.stringify(filteredToDos, null, 2));
-  }, [toDos, doneButton, dateSortButton]);
+    const newTodos = [...toDos];
+    switch (sortByDone) {
+      case 'all':  
+        setFilteredToDos(newTodos);
+        break;
+      case 'done':
+        setFilteredToDos(newTodos.filter((item) => item.done === true));
+        break;
+      case 'undone':
+        setFilteredToDos(newTodos.filter((item) => item.done === false));
+        break;
+    };
 
-  
-
-  const handleSortByDone = () => {
-    const newTodos = [...toDos]
-    if(doneButton === 1) {
-      setFilteredToDos(newTodos);
-    } else if (doneButton === 2) {
-      setFilteredToDos(newTodos.filter((item) => item.done === true));
-    } else if (doneButton === 3) {
-      setFilteredToDos(newTodos.filter((item) => item.done === false));
-    }
-    // console.log("FILTER", filteredToDos);
-    handleSortByDate()
-  };
-
-  const handleSortByDate = () => {
-    console.log("ByDate");
-    if(dateSortButton === 1) {
-      setFilteredToDos(prev => prev.sort((a, b) => b.sortDate - a.sortDate));
-    } else if(dateSortButton === 2) {
-      setFilteredToDos(prev => prev.sort((a, b) => a.sortDate - b.sortDate));
-    }
-  };
+    if(sortByDate === 'later') {
+      return setFilteredToDos(prev => prev.sort((a, b) => b.date.getTime() - a.date.getTime()));
+    };  
+    setFilteredToDos(prev => prev.sort((a, b) => a.date.getTime() - b.date.getTime()));
+  }, [toDos, sortByDone, sortByDate]);
 
   const handleDelete = (itemId) => {
     setToDos(prev => prev.filter(item => item.id !== itemId));
@@ -68,37 +58,38 @@ function App(props) {
     setToDos(newTodos);
   };
 
-
+  const indexOfLastTodo = currentPage * todosPerPage;
+  const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+  const currentTodos = filteredToDos.slice(indexOfFirstTodo, indexOfLastTodo);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <Container maxWidth="sm" >
       <Typography variant='h2' align='center'>ToDo</Typography>
       <ToDoInput handleSubmit={handleSubmit} />
       <Filter 
-      doneButton={doneButton}
-      setDoneButton={setDoneButton}
-      dateSortButton={dateSortButton}
-      setDateSortButton={setDateSortButton}
+        sortByDone={sortByDone}
+        setSortByDone={setSortByDone}
+        sortByDate={sortByDate}
+        setSortByDate={setSortByDate}
+        setCurrentPage={setCurrentPage}
       />
+      {(filteredToDos.length > 5) && 
+        <Pagination 
+          todosPerPage={todosPerPage}
+          totalTodos={filteredToDos.length}
+          paginate={paginate}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      }
       <ToDosList align='center' 
-      handleDelete={handleDelete}
-      handleDone={handleDone}
-      filteredToDos={filteredToDos}/>
-      <Pagination />
+        handleDelete={handleDelete}
+        handleDone={handleDone}
+        currentTodos={currentTodos}
+      />
     </Container>
   );
-}
+};
 
 export default App;
-
-
-    // if(checkSorter === 1) {
-    //   handleAll();
-    //   console.log(1);
-    // } else if(checkSorter === 2) {
-    //   handleDone();
-    //   console.log(2);
-    // } else {
-    //   handleUndone();
-    //   console.log(3);
-    // };

@@ -1,77 +1,71 @@
 import { Grid, Button, ButtonGroup} from '@material-ui/core/';
-import { useState } from 'react';
 
-export function Filter({ dateSortButton, doneButton, setDoneButton, setDateSortButton }) {
+export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, setSortByDate }) {
 
-    const [dateSorter, setDateSorter] = useState(1);
-    const [checkSorter, setCheckSorter] = useState(1);
-    
+    const handleChange = () => {
+      setCurrentPage(1);
+    };
 
     const handleSortLater = () => {
-        if(dateSorter !== 1) {
-          setDateSorter(1);
-          setDateSortButton(1);
-        }
-    }
+        if(sortByDate !== 'later') {
+          setSortByDate('later');
+        };
+    };
     
     const handleSortEarlier = () => {
-        if(dateSorter !== 2) {
-          setDateSorter(2);
-          setDateSortButton(2);
-        }
-    }
+        if(sortByDate !== 'earlier') {
+          setSortByDate('earlier');
+        };
+    };
 
     const handleAll = () => {
-      if(checkSorter !== 1) {
-        setCheckSorter(1);
-        setDoneButton(1);
-      }
-    }
+      if(sortByDone !== 'all') {
+        setSortByDone('all');
+      };
+    };
   
     const handleDone = () => {
-      if(checkSorter !== 2) {
-        setCheckSorter(2);
-        setDoneButton(2);
-      }
-    }
+      if(sortByDone !== 'done') {
+        setSortByDone('done');
+      };
+    };
   
     const handleUndone = () => {
-      if(checkSorter !== 3) {
-        setCheckSorter(3);
-        setDoneButton(3);
-      }
-    }
+      if(sortByDone !== 'undone') {
+        setSortByDone('undone');
+      };
+    };
     
     return (
-        <Grid container spacing={4} justify="space-around" >
-          <Grid item >
-            <ButtonGroup>
+        <Grid container spacing={4} justify="space-between"  >
+          <Grid item onClick={handleChange}>
+            <ButtonGroup >
               <Button onClick={handleAll}
-              color={(doneButton === 1) ? 'primary' : 'default'}
-              variant={(doneButton === 1) ? 'contained' : 'outlined'}
+              color={(sortByDone === 'all') ? 'primary' : 'default'}
+              variant={(sortByDone === 'all') ? 'contained' : 'outlined'}
               >All</Button>
               <Button onClick={handleDone}
-              color={(doneButton === 2) ? 'primary' : 'default'}
-              variant={(doneButton === 2) ? 'contained' : 'outlined'}
+              color={(sortByDone === 'done') ? 'primary' : 'default'}
+              variant={(sortByDone === 'done') ? 'contained' : 'outlined'}
               >Done</Button>
               <Button onClick={handleUndone}
-              color={(doneButton === 3) ? 'primary' : 'default'}
-              variant={(doneButton === 3) ? 'contained' : 'outlined'}
+              color={(sortByDone === 'undone') ? 'primary' : 'default'}
+              variant={(sortByDone === 'undone') ? 'contained' : 'outlined'}
               >Undone</Button>
             </ButtonGroup>
           </Grid>
-          <Grid item>
+          <Grid item onClick={handleChange}>
             <ButtonGroup>
               <Button onClick={handleSortLater}
-              color={(dateSortButton === 1) ? 'primary' : 'default'}
-              variant={(dateSortButton === 1) ? 'contained' : 'outlined'}
+              color={(sortByDate === 'later') ? 'primary' : 'default'}
+              variant={(sortByDate === 'later') ? 'contained' : 'outlined'}
               >Later</Button>
               <Button onClick={handleSortEarlier}
-              color={(dateSortButton === 2) ? 'primary' : 'default'}
-              variant={(dateSortButton === 2) ? 'contained' : 'outlined'}
+              color={(sortByDate === 'earlier') ? 'primary' : 'default'}
+              variant={(sortByDate === 'earlier') ? 'contained' : 'outlined'}
               >Earlier</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
     )
-}
+};

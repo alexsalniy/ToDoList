@@ -2,24 +2,37 @@ import { Grid, Button, ButtonGroup} from '@material-ui/core/';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-export function Pagination() {
+export function Pagination({ setCurrentPage, todosPerPage, totalTodos, paginate, currentPage }) {
+    const pageNumbers = [];
 
+    for (let i = 1; i <= Math.ceil(totalTodos / todosPerPage); i++) {
+        pageNumbers.push(i);
+      }
 
     return (
-        <Grid container spacing={4} justify="space-around">
+        <Grid container spacing={4} justify="space-between" style={{padding: 10}}>
             <Button variant="contained"
-            color={'primary'}>
-                <NavigateBeforeIcon fontSize='large' />
-                <NavigateBeforeIcon fontSize='large' />
+                color={'primary'}
+                onClick={() => setCurrentPage(1)}>
+                <NavigateBeforeIcon />
+                <NavigateBeforeIcon />
             </Button>
             <ButtonGroup>
-                <Button></Button>
+                {pageNumbers.map(number => (
+                    <Button key={number}
+                    color={(number === currentPage) ? 'primary' : 'default'}
+                    variant={(number === currentPage) ? 'contained' : 'outlined'}
+                    onClick={() => paginate(number)}
+                    >{number}</Button>
+                ))}
+                
             </ButtonGroup>
             <Button variant="contained"
-            color={'primary'}>
-                <NavigateNextIcon fontSize='large' />
-                <NavigateNextIcon fontSize='large' />
+                color={'primary'}
+                onClick={() => setCurrentPage(pageNumbers.length)}>
+                <NavigateNextIcon  />
+                <NavigateNextIcon  />
             </Button>
         </Grid>
     )
-}
+};

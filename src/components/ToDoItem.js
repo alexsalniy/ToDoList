@@ -3,6 +3,7 @@ import { Delete } from '@material-ui/icons';
 import React from 'react';
 
 export function ToDoItem({todo, handleDelete, handleDone}) {
+    const date = todo.date.toLocaleString();
 
     return(
         <ListItem >
@@ -15,11 +16,11 @@ export function ToDoItem({todo, handleDelete, handleDone}) {
             />
             <ListItemText 
             style={{ textAlign: 'right'}}
-            secondary={todo.date}
+            secondary={date}
             />
             <IconButton onClick={() => handleDelete(todo.id)}>
                 <Delete />
             </IconButton>
         </ListItem>
     )
-}
+};
