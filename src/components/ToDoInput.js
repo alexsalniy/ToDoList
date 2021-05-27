@@ -16,7 +16,6 @@ function ToDoInput({handleSubmit}) {
                 fullWidth
                 variant='outlined'
                 margin='normal'
-                name='ToDo'
                 onChange={handleChange} 
                 value={inputValue}/> 
          </form>

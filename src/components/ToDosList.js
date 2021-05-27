@@ -6,13 +6,13 @@ import { ToDoItem } from './ToDoItem';
 export function ToDosList({ currentTodos, handleTodoEdit, handleDelete, handleDone}) {
     return(
         <List >
-            {currentTodos.map((todo) => (
+            {currentTodos.map((toDos) => (
                 <ToDoItem 
-                    key={todo.id}
+                    key={toDos.uuid}
                     handleDone={handleDone}
                     handleDelete={handleDelete}
                     handleTodoEdit={handleTodoEdit}
-                    todo={todo}
+                    value={toDos.name}
                 />
             ))}
         </List>

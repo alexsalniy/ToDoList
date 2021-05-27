@@ -7,20 +7,20 @@ export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, 
     };
 
     const handleSortLater = () => {
-        if(sortByDate !== 'later') {
-          setSortByDate('later');
+        if(sortByDate !== 'asc') {
+          setSortByDate('asc');
         };
     };
     
     const handleSortEarlier = () => {
-        if(sortByDate !== 'earlier') {
-          setSortByDate('earlier');
+        if(sortByDate !== 'desc') {
+          setSortByDate('desc');
         };
     };
 
     const handleAll = () => {
-      if(sortByDone !== 'all') {
-        setSortByDone('all');
+      if(sortByDone !== '') {
+        setSortByDone('');
       };
     };
   
@@ -41,8 +41,8 @@ export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, 
           <Grid item onClick={handleChange}>
             <ButtonGroup >
               <Button onClick={handleAll}
-              color={(sortByDone === 'all') ? 'primary' : 'default'}
-              variant={(sortByDone === 'all') ? 'contained' : 'outlined'}
+              color={(sortByDone === '') ? 'primary' : 'default'}
+              variant={(sortByDone === '') ? 'contained' : 'outlined'}
               >All</Button>
               <Button onClick={handleDone}
               color={(sortByDone === 'done') ? 'primary' : 'default'}
@@ -57,12 +57,12 @@ export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, 
           <Grid item >
             <ButtonGroup>
               <Button onClick={handleSortLater}
-              color={(sortByDate === 'later') ? 'primary' : 'default'}
-              variant={(sortByDate === 'later') ? 'contained' : 'outlined'}
+              color={(sortByDate === 'asc') ? 'primary' : 'default'}
+              variant={(sortByDate === 'asc') ? 'contained' : 'outlined'}
               >Later</Button>
               <Button onClick={handleSortEarlier}
-              color={(sortByDate === 'earlier') ? 'primary' : 'default'}
-              variant={(sortByDate === 'earlier') ? 'contained' : 'outlined'}
+              color={(sortByDate === 'desc') ? 'primary' : 'default'}
+              variant={(sortByDate === 'desc') ? 'contained' : 'outlined'}
               >Earlier</Button>
             </ButtonGroup>
           </Grid>
