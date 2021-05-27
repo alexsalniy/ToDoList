@@ -2,12 +2,14 @@ import { Grid, Button, ButtonGroup} from '@material-ui/core/';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-export function Pagination({ setCurrentPage, todosPerPage, totalTodos, paginate, currentPage }) {
+export function Pagination({ setCurrentPage, todosPerPage, totalTodos, currentPage }) {
     const pageNumbers = [];
 
     for (let i = 1; i <= Math.ceil(totalTodos / todosPerPage); i++) {
         pageNumbers.push(i);
       }
+      
+    const paginate = pageNumber => setCurrentPage(pageNumber);
 
     return (
         <Grid container spacing={4} justify="space-between" style={{padding: 10}}>

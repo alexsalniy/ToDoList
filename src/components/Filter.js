@@ -54,7 +54,7 @@ export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, 
               >Undone</Button>
             </ButtonGroup>
           </Grid>
-          <Grid item onClick={handleChange}>
+          <Grid item >
             <ButtonGroup>
               <Button onClick={handleSortLater}
               color={(sortByDate === 'later') ? 'primary' : 'default'}

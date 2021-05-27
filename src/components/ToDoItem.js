@@ -1,9 +1,25 @@
-import { ListItem, ListItemText, Checkbox, IconButton } from '@material-ui/core';
+import { ListItem, ListItemText, Checkbox, IconButton, TextField } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
-import React from 'react';
+import React, { useState } from 'react';
 
-export function ToDoItem({todo, handleDelete, handleDone}) {
+export function ToDoItem({todo, handleTodoEdit, handleDelete, handleDone}) {
     const date = todo.date.toLocaleString();
+    const [toggleEdit, setToggleEdit] = useState(false);
+    const [inputValue, setInputValue] = useState(todo.title);
+
+    const handleKeyPress = (e, id) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            if(inputValue !== '') {
+                handleTodoEdit(id, inputValue);
+                setToggleEdit(false);
+            };
+        };
+        if (e.key === 'Escape') {
+            setToggleEdit(false);
+            setInputValue(todo.title);
+        };
+    };
 
     return(
         <ListItem >
@@ -11,9 +27,22 @@ export function ToDoItem({todo, handleDelete, handleDone}) {
             value={todo.id}
             color='primary'
             onClick={() => handleDone(todo.id)} />
-            <ListItemText 
-            primary={todo.title}
-            />
+            {toggleEdit
+                ? <TextField 
+                    multiline={true}
+                    fullWidth
+                    variant='outlined'
+                    autoFocus={true}
+                    value={inputValue}
+                    onChange={e => setInputValue(e.target.value)}
+                    onKeyDown={e => handleKeyPress(e, todo.id)} 
+                  />
+                : <ListItemText 
+                    style={{overflowWrap: 'break-word'}}
+                    primary={todo.title}
+                    multiline={true}
+                    onClick={() => setToggleEdit(true)}
+                  />}           
             <ListItemText 
             style={{ textAlign: 'right'}}
             secondary={date}

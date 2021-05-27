@@ -17,7 +17,7 @@ function App(props) {
   const [todosPerPage] = useState(5);
   
   const handleSubmit = (inputValue) => {
-    if(inputValue !== '') {
+    if(inputValue.trim() !== '') {
       setToDos(prev => [{
         title: inputValue, 
         date: new Date(), 
@@ -30,14 +30,14 @@ function App(props) {
   useEffect(() => {
     const newTodos = [...toDos];
     switch (sortByDone) {
-      case 'all':  
-        setFilteredToDos(newTodos);
-        break;
       case 'done':
         setFilteredToDos(newTodos.filter((item) => item.done === true));
         break;
       case 'undone':
         setFilteredToDos(newTodos.filter((item) => item.done === false));
+        break;
+      default:  
+        setFilteredToDos(newTodos);
         break;
     };
 
@@ -51,6 +51,13 @@ function App(props) {
     setToDos(prev => prev.filter(item => item.id !== itemId));
   };
 
+  const handleTodoEdit = (id, inputValue) => {
+    const newTodos = [...toDos];
+    const index = newTodos.findIndex(toDos => toDos.id === id);
+    newTodos[index].title = inputValue;
+    setToDos(newTodos);
+  }
+
   const handleDone = (id) => {
     const newTodos = [...toDos];
     const index = newTodos.findIndex(toDos => toDos.id === id);
@@ -61,7 +68,6 @@ function App(props) {
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
   const currentTodos = filteredToDos.slice(indexOfFirstTodo, indexOfLastTodo);
-  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <Container maxWidth="sm" >
@@ -78,7 +84,6 @@ function App(props) {
         <Pagination 
           todosPerPage={todosPerPage}
           totalTodos={filteredToDos.length}
-          paginate={paginate}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
@@ -87,6 +92,7 @@ function App(props) {
         handleDelete={handleDelete}
         handleDone={handleDone}
         currentTodos={currentTodos}
+        handleTodoEdit={handleTodoEdit}
       />
     </Container>
   );
