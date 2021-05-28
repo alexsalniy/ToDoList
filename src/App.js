@@ -10,14 +10,16 @@ import axios from 'axios';
 
 function App(props) {
 
-  const instanceToDo = axios.create({
+ 
+  const getUrl = '/v1/tasks/2';
+  const postURL ='/v1/task/2'
+  const instanceTodo = axios.create({
     baseURL: "https://todo-api-learning.herokuapp.com"
 })
-  const apiUrl = '/v1/tasks/2';
   const [toDos, setToDos] = useState([]);
   const [filteredToDos, setFilteredToDos] = useState([]);
   const [sortByDone, setSortByDone] = useState(''); 
-  const [sortByDate, setSortByDate] = useState('later');
+  const [sortByDate, setSortByDate] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [todosPerPage] = useState(5);
   const [checkTodos, setCheckTodos] = useState([])
@@ -33,13 +35,14 @@ function App(props) {
     };
   };
 
+
 //  date
 
   const getTodos = useCallback(async () => {
-    const getData = await instanceToDo.get('/v1/tasks/2', {
+    const getData = await instanceTodo.get(getUrl, {
       params: {
         filterBy: sortByDone,
-        order: (sortByDate === 'later') ? 'asc' : 'desc'
+        order: (sortByDate === 'asc') ? 'asc' : 'desc'
       }
     });
     setCheckTodos(...getData.data);
@@ -63,12 +66,21 @@ function App(props) {
     setToDos(prev => prev.filter(item => item.uuid !== itemId));
   };
 
-  const handleTodoEdit = (uuid, inputValue) => {
-    const newTodos = [...toDos];
-    const index = newTodos.findIndex(toDos => toDos.uuid === uuid);
-    newTodos[index].name = inputValue;
-    setToDos(newTodos);
-  }
+  // const handleTodoEdit = (uuid, inputValue) => {
+  //   const newTodos = [...toDos];
+  //   const index = newTodos.findIndex(toDos => toDos.uuid === uuid);
+  //   newTodos[index].name = inputValue;
+  //   setToDos(newTodos);
+  // }
+
+  const handleTodoEdit = async (uuid, inputValue) => {
+    console.log(inputValue)
+    await instanceTodo.patch(`${postURL}/${uuid}`,
+      {
+        'name': inputValue
+      });
+    await getTodos();
+  };
 
   // const handleDone = (uuid) => {
   //   const newTodos = [...toDos];
@@ -77,7 +89,15 @@ function App(props) {
   //   setToDos(newTodos);
   // };
 
-  
+  const handleDone = async (todo) => {
+    console.log('done ', todo.done, todo.uuid)
+    await instanceTodo.patch(`${postURL}/${todo.uuid}`,
+      {
+        'name': todo.name,
+        'done': !todo.done
+      });
+    await getTodos();
+  };
 
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;

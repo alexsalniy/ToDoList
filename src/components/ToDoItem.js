@@ -28,7 +28,7 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete, handleDone}) {
             <Checkbox checked={todo.done} 
             value={todo.uuid}
             color='primary'
-            onClick={() => handleDone(todo.uuid)} />
+            onClick={() => handleDone(todo)} />
             {toggleEdit
                 ? <TextField 
                     multiline={true}
