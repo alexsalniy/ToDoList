@@ -6,7 +6,7 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
     const date = todo.createdAt;
     const [toggleEdit, setToggleEdit] = useState(false);
     const [inputValue, setInputValue] = useState(todo.name);
-    const [done, setDone] = useState(todo.done)
+    const [done] = useState(todo.done)
 
     const handleKeyPress = (e, uuid) => {
         if(e.key === 'Enter') {
@@ -38,7 +38,6 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
             onClick={() => handleDone(todo)} />
             {toggleEdit
                 ? <TextField 
-                    multiline={true}
                     fullWidth
                     variant='outlined'
                     autoFocus={true}
@@ -50,7 +49,6 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
                 : <ListItemText 
                     style={{overflowWrap: 'break-word'}}
                     primary={todo.name}
-                    multiline={true}
                     onClick={() => setToggleEdit(true)}
                   />}           
             <ListItemText 

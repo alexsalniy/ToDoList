@@ -44,7 +44,11 @@ function App() {
     } catch (err) {
       errCatch(err);
     }
-  }, [sortByDone, sortByDate])
+  }, [sortByDone, sortByDate, instanceTodo])
+
+  useEffect(() => {
+    getTodos()
+  }, [sortByDone, sortByDate, getTodos])
   
   const handleSubmit = async (inputValue) => {
     try {
@@ -93,9 +97,6 @@ function App() {
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
   const currentTodos = toDos.slice(indexOfFirstTodo, indexOfLastTodo);
 
-  useEffect(() => {
-    getTodos()
-  }, [sortByDone, sortByDate])
 
   return (
     <Container maxWidth="sm" >
