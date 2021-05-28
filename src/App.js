@@ -62,9 +62,14 @@ function App(props) {
     setFilteredToDos (toDos) 
   }, [toDos, sortByDone, sortByDate]);
 
-  const handleDelete = (itemId) => {
-    setToDos(prev => prev.filter(item => item.uuid !== itemId));
-  };
+  // const handleDelete = (itemId) => {
+  //   setToDos(prev => prev.filter(item => item.uuid !== itemId));
+  // };
+
+  const handleDelete = async (uuid) => {
+    await instanceTodo.delete(`${postURL}/${uuid}`);
+    await getTodos();
+  }
 
   // const handleTodoEdit = (uuid, inputValue) => {
   //   const newTodos = [...toDos];
