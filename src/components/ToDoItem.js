@@ -11,7 +11,7 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
     const handleKeyPress = (e, uuid) => {
         if(e.key === 'Enter') {
             e.preventDefault();
-            if(inputValue !== '') {
+            if(inputValue.trim() !== '') {
                 handleTodoEdit(uuid, inputValue, done);
                 setToggleEdit(false);
             };
@@ -63,3 +63,5 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
         </ListItem>
     )
 };
+
+//  multiline

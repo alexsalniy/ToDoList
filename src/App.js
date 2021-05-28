@@ -18,41 +18,74 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [todosPerPage] = useState(5);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [errorStatus, setErrorStatus] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const errCatch = (err) => {
+    setErrorMessage(err.response.data.message);
+    console.log(err.response.data.message);
+    setErrorStatus(err.response.status);
+    console.log(err.response.status);
+    setErrorAlert(true)
+  }
   
   const getTodos = useCallback(async () => {
-    const getData = await instanceTodo.get('/v1/tasks/2', {
-      params: {
-        filterBy: sortByDone,
-        order: sortByDate 
-      }
-    });
-    // console.log('message')
-    setToDos(getData.data);
-    setIsLoaded(true);
-  })
+    try {
+      const getData = await instanceTodo.get('/v1/tasks/2', {
+        params: {
+          filterBy: sortByDone,
+          order: sortByDate 
+        }
+      });
+      // console.log('message')
+      setToDos(getData.data);
+      setIsLoaded(true);
+    } catch (err) {
+      errCatch(err);
+    }
+  }, [sortByDone, sortByDate])
   
   const handleSubmit = async (inputValue) => {
-    await instanceTodo.post(`/v1/task/2`,
-      {
-        'name': inputValue,
-        'done': false
-      });
-    await getTodos();
+    try {
+      if(inputValue.trim() !== '') {
+        await instanceTodo.post(`/v1/task/2`,
+          {
+            'name': inputValue,
+            'done': false
+          });
+        await getTodos();
+      }
+    } catch (err) {
+      errCatch(err);
+    }
   };
 
   const handleDelete = async (uuid) => {
-    await instanceTodo.delete(`/v1/task/2/${uuid}`);
-    await getTodos();
+    try {
+      await instanceTodo.delete(`/v1/task/2/${uuid}`);
+      await getTodos();
+    } catch (err) {
+      errCatch(err);
+    }
   }
 
   const handleTodoEdit = async (uuid, inputValue, done) => {
-    await instanceTodo.patch(`/v1/task/2/${uuid}`,
-      {
-        'name': inputValue,
-        'done': done
-      });
-    await getTodos();
+    try {
+      await instanceTodo.patch(`/v1/task/2/${uuid}`,
+        {
+          'name': inputValue,
+          'done': done
+        });
+      await getTodos();
+    } catch (err) {
+      errCatch(err);
+    }
   };
+
+  const handleClose = () => {
+    setErrorAlert(false);
+  }
 
   // c
 
@@ -95,8 +128,11 @@ function App() {
           <Grid item><CircularProgress/></Grid>
         </Grid>
       }
-      <Snackbar  austoHideDuration={3000} >
-         <Alert severity="error">error</Alert>
+      <Snackbar open={errorAlert} autoHideDuration={3000} onClose={handleClose}>
+         <Alert severity="error" onClose={handleClose}>
+           { `Status: ${errorStatus}
+                Message: ${errorMessage}`}
+         </Alert>
       </Snackbar>
     </Container>
   );
