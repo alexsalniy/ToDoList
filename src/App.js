@@ -24,20 +24,6 @@ function App(props) {
   const [todosPerPage] = useState(5);
   const [checkTodos, setCheckTodos] = useState([])
   
-  const handleSubmit = (inputValue) => {
-    if(inputValue.trim() !== '') {
-      setToDos(prev => [{
-        name: inputValue, 
-        createdAt: new Date(), 
-        done: false,
-        uuid: uuidv4()}, 
-        ...prev]);
-    };
-  };
-
-
-//  date
-
   const getTodos = useCallback(async () => {
     const getData = await instanceTodo.get(getUrl, {
       params: {
@@ -53,6 +39,30 @@ function App(props) {
     console.log('toDos ', toDos)
     console.log('checkData ', checkData)
   })
+  
+  // const handleSubmit = (inputValue) => {
+  //   if(inputValue.trim() !== '') {
+  //     setToDos(prev => [{
+  //       name: inputValue, 
+  //       createdAt: new Date(), 
+  //       done: false,
+  //       uuid: uuidv4()}, 
+  //       ...prev]);
+  //   };
+  // };
+
+  const handleSubmit = async (inputValue) => {
+    await instanceTodo.post(`${postURL}`,
+      {
+        'name': inputValue,
+        'done': false
+      });
+    await getTodos();
+  };
+
+//  date
+
+ 
 
   useEffect(() => {
     getTodos()
