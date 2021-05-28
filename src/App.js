@@ -44,8 +44,9 @@ function App(props) {
     });
     setCheckTodos(...getData.data);
     const checkData = (getData.data);
+    setToDos(checkData)
     setFilteredToDos(checkData)
-    console.log('get data ', getData.data)
+    console.log('filteredToDos ', filteredToDos)
     console.log('toDos ', toDos)
     console.log('checkData ', checkData)
   })
@@ -69,12 +70,14 @@ function App(props) {
     setToDos(newTodos);
   }
 
-  const handleDone = (uuid) => {
-    const newTodos = [...toDos];
-    const index = newTodos.findIndex(toDos => toDos.uuid === uuid);
-    newTodos[index].done = ((newTodos[index].done === false) ? true : false);
-    setToDos(newTodos);
-  };
+  // const handleDone = (uuid) => {
+  //   const newTodos = [...toDos];
+  //   const index = newTodos.findIndex(toDos => toDos.uuid === uuid);
+  //   newTodos[index].done = ((newTodos[index].done === false) ? true : false);
+  //   setToDos(newTodos);
+  // };
+
+  
 
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;

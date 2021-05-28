@@ -2,10 +2,12 @@ import { ListItem, ListItemText, Checkbox, IconButton, TextField } from '@materi
 import { Delete } from '@material-ui/icons';
 import React, { useState } from 'react';
 
-export function ToDoItem({toDos, handleTodoEdit, handleDelete, handleDone}) {
-    // const date = toDos.createdAt;
+export function ToDoItem({todo, handleTodoEdit, handleDelete, handleDone}) {
+    const date = todo.createdAt;
     const [toggleEdit, setToggleEdit] = useState(false);
-    const [inputValue, setInputValue] = useState(toDos.name);
+    const [inputValue, setInputValue] = useState(todo.name);
+
+    console.log(todo)
 
     const handleKeyPress = (e, uuid) => {
         if(e.key === 'Enter') {
@@ -17,16 +19,16 @@ export function ToDoItem({toDos, handleTodoEdit, handleDelete, handleDone}) {
         };
         if (e.key === 'Escape') {
             setToggleEdit(false);
-            setInputValue(toDos.name);
+            setInputValue(todo.name);
         };
     };
 
     return(
         <ListItem >
-            <Checkbox checked={toDos.done} 
-            value={toDos.uuid}
+            <Checkbox checked={todo.done} 
+            value={todo.uuid}
             color='primary'
-            onClick={() => handleDone(toDos.uuid)} />
+            onClick={() => handleDone(todo.uuid)} />
             {toggleEdit
                 ? <TextField 
                     multiline={true}
@@ -35,19 +37,19 @@ export function ToDoItem({toDos, handleTodoEdit, handleDelete, handleDone}) {
                     autoFocus={true}
                     value={inputValue}
                     onChange={e => setInputValue(e.target.value)}
-                    onKeyDown={e => handleKeyPress(e, toDos.uuid)} 
+                    onKeyDown={e => handleKeyPress(e, todo.uuid)} 
                   />
                 : <ListItemText 
                     style={{overflowWrap: 'break-word'}}
-                    primary={toDos.title}
+                    primary={todo.name}
                     multiline={true}
                     onClick={() => setToggleEdit(true)}
                   />}           
             <ListItemText 
             style={{ textAlign: 'right'}}
-            // secondary={date}
+            secondary={date}
             />
-            <IconButton onClick={() => handleDelete(toDos.uuid)}>
+            <IconButton onClick={() => handleDelete(todo.uuid)}>
                 <Delete />
             </IconButton>
         </ListItem>
