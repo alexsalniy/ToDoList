@@ -7,14 +7,14 @@ export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, 
     };
 
     const handleSortLater = () => {
-        if(sortByDate !== 'asc') {
-          setSortByDate('asc');
+        if(sortByDate !== 'desc') {
+          setSortByDate('desc');
         };
     };
     
     const handleSortEarlier = () => {
-        if(sortByDate !== 'desc') {
-          setSortByDate('desc');
+        if(sortByDate !== 'asc') {
+          setSortByDate('asc');
         };
     };
 
@@ -57,12 +57,12 @@ export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, 
           <Grid item >
             <ButtonGroup>
               <Button onClick={handleSortLater}
-              color={(sortByDate === 'asc') ? 'primary' : 'default'}
-              variant={(sortByDate === 'asc') ? 'contained' : 'outlined'}
-              >Later</Button>
-              <Button onClick={handleSortEarlier}
               color={(sortByDate === 'desc') ? 'primary' : 'default'}
               variant={(sortByDate === 'desc') ? 'contained' : 'outlined'}
+              >Later</Button>
+              <Button onClick={handleSortEarlier}
+              color={(sortByDate === 'asc') ? 'primary' : 'default'}
+              variant={(sortByDate === 'asc') ? 'contained' : 'outlined'}
               >Earlier</Button>
             </ButtonGroup>
           </Grid>

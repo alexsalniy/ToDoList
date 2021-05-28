@@ -1,58 +1,38 @@
-import {Container, Typography } from '@material-ui/core/';
+import {CircularProgress, Container, Grid, Typography, Snackbar } from '@material-ui/core/';
 import './App.css';
 import { ToDosList } from './components/ToDosList';
 import ToDoInput from './components/ToDoInput';
 import { Filter } from './components/Filter';
 import { Pagination } from './components/Pagination';
 import { useCallback, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import {Alert} from '@material-ui/lab'
 import axios from 'axios';
 
-function App(props) {
-
- 
-  const getUrl = '/v1/tasks/2';
-  const postURL ='/v1/task/2'
+function App() {
   const instanceTodo = axios.create({
     baseURL: "https://todo-api-learning.herokuapp.com"
 })
   const [toDos, setToDos] = useState([]);
-  const [filteredToDos, setFilteredToDos] = useState([]);
   const [sortByDone, setSortByDone] = useState(''); 
-  const [sortByDate, setSortByDate] = useState('asc');
+  const [sortByDate, setSortByDate] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [todosPerPage] = useState(5);
-  const [checkTodos, setCheckTodos] = useState([])
+  const [isLoaded, setIsLoaded] = useState(false);
   
   const getTodos = useCallback(async () => {
-    const getData = await instanceTodo.get(getUrl, {
+    const getData = await instanceTodo.get('/v1/tasks/2', {
       params: {
         filterBy: sortByDone,
-        order: (sortByDate === 'asc') ? 'asc' : 'desc'
+        order: sortByDate 
       }
     });
-    setCheckTodos(...getData.data);
-    const checkData = (getData.data);
-    setToDos(checkData)
-    setFilteredToDos(checkData)
-    console.log('filteredToDos ', filteredToDos)
-    console.log('toDos ', toDos)
-    console.log('checkData ', checkData)
+    // console.log('message')
+    setToDos(getData.data);
+    setIsLoaded(true);
   })
   
-  // const handleSubmit = (inputValue) => {
-  //   if(inputValue.trim() !== '') {
-  //     setToDos(prev => [{
-  //       name: inputValue, 
-  //       createdAt: new Date(), 
-  //       done: false,
-  //       uuid: uuidv4()}, 
-  //       ...prev]);
-  //   };
-  // };
-
   const handleSubmit = async (inputValue) => {
-    await instanceTodo.post(`${postURL}`,
+    await instanceTodo.post(`/v1/task/2`,
       {
         'name': inputValue,
         'done': false
@@ -60,63 +40,29 @@ function App(props) {
     await getTodos();
   };
 
-//  date
+  const handleDelete = async (uuid) => {
+    await instanceTodo.delete(`/v1/task/2/${uuid}`);
+    await getTodos();
+  }
 
- 
+  const handleTodoEdit = async (uuid, inputValue, done) => {
+    await instanceTodo.patch(`/v1/task/2/${uuid}`,
+      {
+        'name': inputValue,
+        'done': done
+      });
+    await getTodos();
+  };
+
+  // c
+
+  const indexOfLastTodo = currentPage * todosPerPage;
+  const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+  const currentTodos = toDos.slice(indexOfFirstTodo, indexOfLastTodo);
 
   useEffect(() => {
     getTodos()
   }, [sortByDone, sortByDate])
-
-  useEffect(() => {
-    setFilteredToDos (toDos) 
-  }, [toDos, sortByDone, sortByDate]);
-
-  // const handleDelete = (itemId) => {
-  //   setToDos(prev => prev.filter(item => item.uuid !== itemId));
-  // };
-
-  const handleDelete = async (uuid) => {
-    await instanceTodo.delete(`${postURL}/${uuid}`);
-    await getTodos();
-  }
-
-  // const handleTodoEdit = (uuid, inputValue) => {
-  //   const newTodos = [...toDos];
-  //   const index = newTodos.findIndex(toDos => toDos.uuid === uuid);
-  //   newTodos[index].name = inputValue;
-  //   setToDos(newTodos);
-  // }
-
-  const handleTodoEdit = async (uuid, inputValue) => {
-    console.log(inputValue)
-    await instanceTodo.patch(`${postURL}/${uuid}`,
-      {
-        'name': inputValue
-      });
-    await getTodos();
-  };
-
-  // const handleDone = (uuid) => {
-  //   const newTodos = [...toDos];
-  //   const index = newTodos.findIndex(toDos => toDos.uuid === uuid);
-  //   newTodos[index].done = ((newTodos[index].done === false) ? true : false);
-  //   setToDos(newTodos);
-  // };
-
-  const handleDone = async (todo) => {
-    console.log('done ', todo.done, todo.uuid)
-    await instanceTodo.patch(`${postURL}/${todo.uuid}`,
-      {
-        'name': todo.name,
-        'done': !todo.done
-      });
-    await getTodos();
-  };
-
-  const indexOfLastTodo = currentPage * todosPerPage;
-  const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-  const currentTodos = filteredToDos.slice(indexOfFirstTodo, indexOfLastTodo);
 
   return (
     <Container maxWidth="sm" >
@@ -129,20 +75,29 @@ function App(props) {
         setSortByDate={setSortByDate}
         setCurrentPage={setCurrentPage}
       />
-      {(filteredToDos.length > 5) && 
+      {(toDos.length > 5 && isLoaded) &&
         <Pagination 
           todosPerPage={todosPerPage}
-          totalTodos={filteredToDos.length}
+          totalTodos={toDos.length}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
       }
-      <ToDosList align='center' 
-        handleDelete={handleDelete}
-        handleDone={handleDone}
-        currentTodos={currentTodos}
-        handleTodoEdit={handleTodoEdit}
-      />
+      {isLoaded &&
+        <ToDosList align='center' 
+          handleDelete={handleDelete}
+          currentTodos={currentTodos}
+          handleTodoEdit={handleTodoEdit}
+        />
+      }
+      {!isLoaded && 
+        <Grid container alignItems='center' direction='column'>
+          <Grid item><CircularProgress/></Grid>
+        </Grid>
+      }
+      <Snackbar  austoHideDuration={3000} >
+         <Alert severity="error">error</Alert>
+      </Snackbar>
     </Container>
   );
 };

@@ -10,7 +10,6 @@ export function ToDosList({ currentTodos, handleTodoEdit, handleDelete, handleDo
                 <ToDoItem 
                     key={todo.uuid}
                     todo={todo}
-                    handleDone={handleDone}
                     handleDelete={handleDelete}
                     handleTodoEdit={handleTodoEdit}
                 />

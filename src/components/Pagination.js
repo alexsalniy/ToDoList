@@ -12,9 +12,9 @@ export function Pagination({ setCurrentPage, todosPerPage, totalTodos, currentPa
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     return (
-        <Grid container spacing={4} justify="space-between" style={{padding: 10}}>
+        <Grid container spacing={4} justify="center" style={{padding: 10}}>
             <Button variant="contained"
-                color={'primary'}
+                color={'default'}
                 onClick={() => setCurrentPage(1)}>
                 <NavigateBeforeIcon />
                 <NavigateBeforeIcon />
@@ -30,7 +30,7 @@ export function Pagination({ setCurrentPage, todosPerPage, totalTodos, currentPa
                 
             </ButtonGroup>
             <Button variant="contained"
-                color={'primary'}
+                color={'default'}
                 onClick={() => setCurrentPage(pageNumbers.length)}>
                 <NavigateNextIcon  />
                 <NavigateNextIcon  />

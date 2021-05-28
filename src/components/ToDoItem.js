@@ -2,18 +2,17 @@ import { ListItem, ListItemText, Checkbox, IconButton, TextField } from '@materi
 import { Delete } from '@material-ui/icons';
 import React, { useState } from 'react';
 
-export function ToDoItem({todo, handleTodoEdit, handleDelete, handleDone}) {
+export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
     const date = todo.createdAt;
     const [toggleEdit, setToggleEdit] = useState(false);
     const [inputValue, setInputValue] = useState(todo.name);
-
-    console.log(todo)
+    const [done, setDone] = useState(todo.done)
 
     const handleKeyPress = (e, uuid) => {
         if(e.key === 'Enter') {
             e.preventDefault();
             if(inputValue !== '') {
-                handleTodoEdit(uuid, inputValue);
+                handleTodoEdit(uuid, inputValue, done);
                 setToggleEdit(false);
             };
         };
@@ -23,6 +22,14 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete, handleDone}) {
         };
     };
 
+    const handleClick = () => {
+        setToggleEdit(false);
+        setInputValue(todo.name);
+    }
+
+    const handleDone = (todo) => {
+        handleTodoEdit(todo.uuid, inputValue, !todo.done )
+    }
     return(
         <ListItem >
             <Checkbox checked={todo.done} 
@@ -38,6 +45,7 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete, handleDone}) {
                     value={inputValue}
                     onChange={e => setInputValue(e.target.value)}
                     onKeyDown={e => handleKeyPress(e, todo.uuid)} 
+                    onBlur={handleClick}
                   />
                 : <ListItemText 
                     style={{overflowWrap: 'break-word'}}
