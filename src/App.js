@@ -45,7 +45,7 @@ function App() {
 
   useEffect(() => {
     getTodos()
-  }, [sortByDone, sortByDate, getTodos])
+  }, [getTodos])
   
   const handleSubmit = async (inputValue) => {
     try {
