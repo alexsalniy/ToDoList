@@ -27,7 +27,6 @@ export function Pagination({ setCurrentPage, todosPerPage, totalTodos, currentPa
                     onClick={() => paginate(number)}
                     >{number}</Button>
                 ))}
-                
             </ButtonGroup>
             <Button variant="contained"
                 color={'default'}

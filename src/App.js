@@ -24,9 +24,7 @@ function App() {
 
   const errCatch = (err) => {
     setErrorMessage(err.response.data.message);
-    console.log(err.response.data.message);
     setErrorStatus(err.response.status);
-    console.log(err.response.status);
     setErrorAlert(true)
   }
   
@@ -38,7 +36,6 @@ function App() {
           order: sortByDate 
         }
       });
-      // console.log('message')
       setToDos(getData.data);
       setIsLoaded(true);
     } catch (err) {
@@ -91,12 +88,9 @@ function App() {
     setErrorAlert(false);
   }
 
-  // c
-
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
   const currentTodos = toDos.slice(indexOfFirstTodo, indexOfLastTodo);
-
 
   return (
     <Container maxWidth="sm" >

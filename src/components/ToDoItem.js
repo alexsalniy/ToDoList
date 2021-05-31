@@ -61,5 +61,3 @@ export function ToDoItem({todo, handleTodoEdit, handleDelete }) {
         </ListItem>
     )
 };
-
-//  multiline
