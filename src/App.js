@@ -41,7 +41,7 @@ function App() {
     } catch (err) {
       errCatch(err);
     }
-  }, [sortByDone, sortByDate, instanceTodo])
+  }, [sortByDone, sortByDate]) // eslint-disable-line
 
   useEffect(() => {
     getTodos()
