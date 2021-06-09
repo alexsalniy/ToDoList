@@ -1,9 +1,9 @@
 import { Grid, Button, ButtonGroup} from '@material-ui/core/';
 
-export function Filter({ setCurrentPage, sortByDate, sortByDone, setSortByDone, setSortByDate }) {
+export function Filter({ setPage, sortByDate, sortByDone, setSortByDone, setSortByDate }) {
 
     const handleChange = () => {
-      setCurrentPage(1);
+      setPage(1);
     };
 
     const handleSortLater = () => {

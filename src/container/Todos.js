@@ -1,24 +1,24 @@
-import {CircularProgress, Container, Grid, Typography, Snackbar } from '@material-ui/core/';
+import {CircularProgress, Container, Grid, Typography, Snackbar, Button } from '@material-ui/core/';
 import { ToDosList } from '../components/ToDosList';
 import ToDoInput from '../components/ToDoInput';
 import { Filter } from '../components/Filter';
 import { Pagination } from '../components/Pagination';
 import { useCallback, useEffect, useState } from 'react';
 import {Alert} from '@material-ui/lab'
-import axios from 'axios';
 
-export function Todos({instanceTodo, token}) {
+
+export function Todos({instanceTodo, setIsLogined}) {
 
   const [toDos, setToDos] = useState([]);
   const [sortByDone, setSortByDone] = useState(''); 
   const [sortByDate, setSortByDate] = useState('desc');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [todosPerPage] = useState(5);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit ] = useState(5);
   const [isLoaded, setIsLoaded] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorStatus, setErrorStatus] = useState();
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLogined, setIsLogined] = useState(false)
+  const [pagesCount, setPagesCount] = useState('')
 
   const errCatch = (err) => {
     setErrorMessage(err.response.data.message);
@@ -29,22 +29,33 @@ export function Todos({instanceTodo, token}) {
   const getTodos = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
+      instanceTodo.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       console.log('token', token)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const getData = await instanceTodo.get('/tasks', {
         params: {
           sortByDone: sortByDone,
           sortByDate: sortByDate,
-          page: 1,
-          limit: 5  
+          page: page,
+          limit: limit  
         }
       });
-      setToDos(getData.data);
+      console.log(getData.data)
+      setToDos(getData.data.Tasks);
+      setLimit(getData.data.limit);
+      setPagesCount(getData.data.pagesCount)
       setIsLoaded(true);
+      
     } catch (err) {
       errCatch(err);
+      const message = err.response.data.message
+      console.log(message);
+      if(message === 'Invalid token') {
+        localStorage.removeItem('token')
+        setIsLogined(false)
+      }
+      // console.log(err.response)
     }
-  }, [sortByDone, sortByDate]) // eslint-disable-line
+  }, [sortByDone, sortByDate, page]) // eslint-disable-line
 
   useEffect(() => {
     getTodos()
@@ -62,21 +73,23 @@ export function Todos({instanceTodo, token}) {
       }
     } catch (err) {
       errCatch(err);
+      // console.log(err)
     }
   };
 
   const handleDelete = async (uuid) => {
     try {
-      await instanceTodo.delete(`/task${uuid}`);
+      await instanceTodo.delete(`/task/${uuid}`);
       await getTodos();
     } catch (err) {
       errCatch(err);
+      // console.log(err.response)
     }
   }
 
   const handleTodoEdit = async (uuid, inputValue, done) => {
     try {
-      await instanceTodo.patch(`/task${uuid}`,
+      await instanceTodo.patch(`/task/${uuid}`,
         {
           'name': inputValue,
           'done': done
@@ -84,6 +97,7 @@ export function Todos({instanceTodo, token}) {
       await getTodos();
     } catch (err) {
       errCatch(err);
+      // console.log(err.response)
     }
   };
 
@@ -91,33 +105,44 @@ export function Todos({instanceTodo, token}) {
     setErrorAlert(false);
   }
 
-  const indexOfLastTodo = currentPage * todosPerPage;
-  const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-  const currentTodos = toDos.slice(indexOfFirstTodo, indexOfLastTodo);
+  const handleLogout = (event) => {
+    setIsLogined(false);
+  }
+
 
   return (
     <Container maxWidth="sm" >
-      <Typography variant='h2' align='center'>ToDo</Typography>
+      <Grid>
+        <Typography variant='h2' align='center'
+        style={{ float: 'left'}}>ToDo</Typography>
+        <Button
+        variant="contained"
+        color={'secondary'}
+        style={{ marginTop: 20, float: 'right'}}
+        onClick={handleLogout}>
+          Logout
+        </Button>
+      </Grid>
       <ToDoInput handleSubmit={handleSubmit} />
       <Filter 
         sortByDone={sortByDone}
         setSortByDone={setSortByDone}
         sortByDate={sortByDate}
         setSortByDate={setSortByDate}
-        setCurrentPage={setCurrentPage}
+        setPage={setPage}
       />
-      {(toDos.length > 5 && isLoaded) &&
+      {(pagesCount > 1 && isLoaded) &&
         <Pagination 
-          todosPerPage={todosPerPage}
+          pagesCount={pagesCount}
           totalTodos={toDos.length}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
+          page={page}
+          setPage={setPage}
         />
       }
       {isLoaded &&
         <ToDosList align='center' 
           handleDelete={handleDelete}
-          currentTodos={currentTodos}
+          toDos={toDos}
           handleTodoEdit={handleTodoEdit}
         />
       }
@@ -128,7 +153,7 @@ export function Todos({instanceTodo, token}) {
       }
       <Snackbar open={errorAlert} autoHideDuration={3000} onClose={handleClose}>
          <Alert severity="error" onClose={handleClose}>
-            {/* {const Content = `Status: ${errorStatus} Message: ${errorMessage}`} */}
+           Status: {errorStatus}  {errorMessage}
          </Alert>
       </Snackbar>
     </Container>
