@@ -30,7 +30,6 @@ export function Todos({instanceTodo, setIsLogined}) {
     try {
       const token = localStorage.getItem('token');
       instanceTodo.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log('token', token)
       const getData = await instanceTodo.get('/tasks', {
         params: {
           sortByDone: sortByDone,
@@ -39,7 +38,6 @@ export function Todos({instanceTodo, setIsLogined}) {
           limit: limit  
         }
       });
-      console.log(getData.data)
       setToDos(getData.data.Tasks);
       setLimit(getData.data.limit);
       setPagesCount(getData.data.pagesCount)
@@ -48,12 +46,10 @@ export function Todos({instanceTodo, setIsLogined}) {
     } catch (err) {
       errCatch(err);
       const message = err.response.data.message
-      console.log(message);
       if(message === 'Invalid token') {
         localStorage.removeItem('token')
         setIsLogined(false)
       }
-      // console.log(err.response)
     }
   }, [sortByDone, sortByDate, page]) // eslint-disable-line
 
@@ -73,7 +69,6 @@ export function Todos({instanceTodo, setIsLogined}) {
       }
     } catch (err) {
       errCatch(err);
-      // console.log(err)
     }
   };
 
@@ -83,7 +78,6 @@ export function Todos({instanceTodo, setIsLogined}) {
       await getTodos();
     } catch (err) {
       errCatch(err);
-      // console.log(err.response)
     }
   }
 
@@ -97,7 +91,6 @@ export function Todos({instanceTodo, setIsLogined}) {
       await getTodos();
     } catch (err) {
       errCatch(err);
-      // console.log(err.response)
     }
   };
 

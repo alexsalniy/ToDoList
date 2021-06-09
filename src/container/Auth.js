@@ -26,8 +26,6 @@ export function Auth({instanceTodo, setIsLogined }) {
     try {
       await instanceTodo.post(`/signup`, form)
       handleLogin(form)
-      console.log(form.username, ` form `)
-      console.log(form.password, ` form `)
     } catch(err) {
       errCatch(err);
     }
@@ -35,12 +33,9 @@ export function Auth({instanceTodo, setIsLogined }) {
 
   const handleLogin = async (form) => {
     try {
-      console.log(form, ` form `)
       const res = await instanceTodo.post(`/login`, form)
       const token = res.data.token;
       localStorage.setItem('token', token);
-      console.log(res.data.token)
-      console.log(token)
       if(token) {
         setIsLogined(true)
       }
@@ -49,7 +44,6 @@ export function Auth({instanceTodo, setIsLogined }) {
     }
   }
 
-  // const handleSubmit = (event) => {!signup ? handleLogin : handleSignup}
 
   const handleAuthChange = event => {
     setSignup(!signup)
