@@ -1,9 +1,10 @@
 import { Container } from '@material-ui/core/';
 import './App.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import axios from 'axios';
 import { Auth } from './container/Auth'
 import { Todos } from './container/Todos'
+import * as jwt from 'jsonwebtoken'
 
 function App() {
   const instanceTodo = axios.create({
@@ -11,10 +12,23 @@ function App() {
 })
   const [isLogined, setIsLogined] = useState(false)
   const checkToken = useCallback(() =>{
-    if(localStorage.token) setIsLogined(true)
+    if(localStorage.token) {
+      console.log('localStorage.token', localStorage.token);
+      console.log('localStorage.token', localStorage.token.split('.')[1]);
+      const exp = jwt.decode(localStorage.token)
+      console.log('exp', exp);
+      exp ? setIsLogined(true) : setIsLogined(false) && localStorage.removeItem('token')
+    }
   },[])
+  console.log('render')
 
-  useEffect(() => {
+  // useLayoutEffect(() => {
+  //   if(sessionStorage.getItem('token')) {
+  //     const exp = jwt.decode(sessionStorage.getItem('token').split(' ')[1])?.exp
+  //   Date.now() > exp ? setIsLogined(true) : setIsLogined(false)}
+  // })
+
+  useLayoutEffect(() => {
     checkToken()
   }, [checkToken])
 

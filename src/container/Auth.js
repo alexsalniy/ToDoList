@@ -11,7 +11,7 @@ export function Auth({instanceTodo, setIsLogined }) {
   const changeHandler = event => {
     setForm({...form, [event.target.name]: event.target.value })
   }
-
+  
   const errCatch = (err) => {
     setErrorMessage(err.response.data.message);
     setErrorStatus(err.response.status);
@@ -65,8 +65,7 @@ export function Auth({instanceTodo, setIsLogined }) {
         </Grid>
         <form onSubmit = {event => {
           event.preventDefault()
-          !signup ? handleLogin(form) : handleSignup(form)
-          setForm('')}}>
+          }}>
           <TextField
             fullWidth
             variant='outlined'
@@ -92,13 +91,17 @@ export function Auth({instanceTodo, setIsLogined }) {
           />
           <Grid container spacing={4} justify="center" style={{padding: 10}}>
             {!signup
-              ? <Button variant="contained"
+              ? <Button 
+                  variant="contained"
+                  type='submit'
                   color={'primary'}
                   style={{margin: 10}}
                   onClick={event => handleLogin(form)}>
                     Login
                 </Button>
-              : <Button variant="contained"
+              : <Button
+                  type='submit'
+                  variant="contained"
                   color={'secondary'}
                   style={{margin: 10}}
                   onClick={event => handleSignup(form)}>

@@ -25,17 +25,18 @@ export function Todos({instanceTodo, setIsLogined}) {
     setErrorStatus(err.response.status);
     setErrorAlert(true)
   }
+  console.log('render')
   
   const getTodos = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       instanceTodo.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const getData = await instanceTodo.get('/tasks/', {
+      const getData = await instanceTodo.get('/tasks', {
         params: {
           sortByDone: sortByDone,
           sortByDate: sortByDate,
           page: page,
-          limit: limit  
+          limit: 5
         }
       });
       setToDos(getData.data.Tasks);
@@ -60,7 +61,7 @@ export function Todos({instanceTodo, setIsLogined}) {
   const handleSubmit = async (inputValue) => {
     try {
       if(inputValue.trim() !== '') {
-        await instanceTodo.post(`/task/`,
+        await instanceTodo.post(`/task`,
           {
             'name': inputValue,
             'done': false
