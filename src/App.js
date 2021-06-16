@@ -5,28 +5,22 @@ import axios from 'axios';
 import { Auth } from './container/Auth'
 import { Todos } from './container/Todos'
 import * as jwt from 'jsonwebtoken'
+import { useSelector } from 'react-redux';
+import { selectAuth } from './reduxToolkit/authSlice';
 
 function App() {
   const instanceTodo = axios.create({
     baseURL: "https://todos-mvp.herokuapp.com"
 })
   const [isLogined, setIsLogined] = useState(false)
+  const log = useSelector(selectAuth)
+  console.log(log)
   const checkToken = useCallback(() =>{
     if(localStorage.token) {
-      console.log('localStorage.token', localStorage.token);
-      console.log('localStorage.token', localStorage.token.split('.')[1]);
       const exp = jwt.decode(localStorage.token)
-      console.log('exp', exp);
       exp ? setIsLogined(true) : setIsLogined(false) && localStorage.removeItem('token')
     }
   },[])
-  console.log('render')
-
-  // useLayoutEffect(() => {
-  //   if(sessionStorage.getItem('token')) {
-  //     const exp = jwt.decode(sessionStorage.getItem('token').split(' ')[1])?.exp
-  //   Date.now() > exp ? setIsLogined(true) : setIsLogined(false)}
-  // })
 
   useLayoutEffect(() => {
     checkToken()
@@ -34,7 +28,7 @@ function App() {
 
   return (
     <Container maxWidth="sm" >
-      {isLogined
+      {log
         ? <Todos 
           instanceTodo={instanceTodo}
           setIsLogined={setIsLogined}/>

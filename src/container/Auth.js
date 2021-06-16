@@ -1,13 +1,16 @@
 import { Snackbar, Grid, Container, TextField, Typography, Button } from '@material-ui/core/';
 import React, {useState} from 'react'
 import {Alert} from '@material-ui/lab'
+import { useDispatch } from 'react-redux';
+import { toggleLogined } from '../reduxToolkit/authSlice';
 
 export function Auth({instanceTodo, setIsLogined }) {
   const [form, setForm] = useState({username: '', password:''})
-  const [signup, setSignup] = useState(false)
+  const [authToggle, setAuthToggle] = useState(false)
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorStatus, setErrorStatus] = useState();
   const [errorMessage, setErrorMessage] = useState('');
+  const dispatch = useDispatch()
   const changeHandler = event => {
     setForm({...form, [event.target.name]: event.target.value })
   }
@@ -37,7 +40,7 @@ export function Auth({instanceTodo, setIsLogined }) {
       const token = res.data.token;
       localStorage.setItem('token', token);
       if(token) {
-        setIsLogined(true)
+        dispatch(toggleLogined())
       }
     } catch(err) {
       errCatch(err);
@@ -46,7 +49,7 @@ export function Auth({instanceTodo, setIsLogined }) {
 
 
   const handleAuthChange = event => {
-    setSignup(!signup)
+    setAuthToggle(!authToggle)
   }
 
   return (
@@ -60,7 +63,7 @@ export function Auth({instanceTodo, setIsLogined }) {
             color={'default'}
             onClick={handleAuthChange}
             style={{margin: 10, float: 'right'}}>
-              {signup ? 'Login' : 'Signup'}
+              {authToggle ? 'Login' : 'Signup'}
           </Button>
         </Grid>
         <form onSubmit = {event => {
@@ -90,7 +93,7 @@ export function Auth({instanceTodo, setIsLogined }) {
             value={form.password}
           />
           <Grid container spacing={4} justify="center" style={{padding: 10}}>
-            {!signup
+            {!authToggle
               ? <Button 
                   variant="contained"
                   type='submit'

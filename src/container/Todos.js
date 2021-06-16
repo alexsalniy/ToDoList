@@ -5,6 +5,8 @@ import { Filter } from '../components/Filter';
 import { Pagination } from '../components/Pagination';
 import { useCallback, useEffect, useState } from 'react';
 import {Alert} from '@material-ui/lab'
+import { useDispatch } from 'react-redux';
+import { toggleLogined } from '../reduxToolkit/authSlice';
 
 
 export function Todos({instanceTodo, setIsLogined}) {
@@ -19,6 +21,7 @@ export function Todos({instanceTodo, setIsLogined}) {
   const [errorStatus, setErrorStatus] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const [pagesCount, setPagesCount] = useState('')
+  const dispatch = useDispatch()
 
   const errCatch = (err) => {
     setErrorMessage(err.response.data.message);
@@ -49,7 +52,7 @@ export function Todos({instanceTodo, setIsLogined}) {
       const message = err.response.data.message
       if(message === 'Invalid token') {
         localStorage.removeItem('token')
-        setIsLogined(false)
+        dispatch(toggleLogined())
       }
     }
   }, [sortByDone, sortByDate, page]) // eslint-disable-line
@@ -100,7 +103,7 @@ export function Todos({instanceTodo, setIsLogined}) {
   }
 
   const handleLogout = (event) => {
-    setIsLogined(false);
+    dispatch(toggleLogined())
   }
 
 
